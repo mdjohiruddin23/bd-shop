@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#087f5b">
+  <title>BD Shop — অনলাইন বাজার</title>
+  <style>
+    :root{--green:#087f5b;--dark:#12372b;--light:#f3faf6;--orange:#ffb703;--muted:#66756e}
+    *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,"Noto Sans Bengali",Arial,sans-serif;color:#18332a;background:#fff}
+    button,input,select{font:inherit} button{cursor:pointer}
+    .top{background:var(--dark);color:white;text-align:center;padding:8px 12px;font-size:13px}
+    header{position:sticky;top:0;background:white;z-index:5;border-bottom:1px solid #e5eee8}
+    .head{max-width:1100px;margin:auto;padding:14px 16px;display:flex;gap:12px;align-items:center}
+    .logo{font-weight:900;font-size:24px;color:var(--green);white-space:nowrap}.logo span{color:var(--orange)}
+    .search{flex:1;display:flex;gap:8px}.search input{width:100%;min-width:0;border:1px solid #d7e5dc;border-radius:10px;padding:11px 12px;outline-color:var(--green)}
+    .cartbtn,.primary{background:var(--green);color:white;border:0;border-radius:10px;padding:11px 14px;font-weight:700}
+    .hero{background:linear-gradient(120deg,#e6f7ed,#f9fcf5);padding:34px 16px}
+    .hero-inner{max-width:1100px;margin:auto;display:grid;grid-template-columns:1.25fr .75fr;align-items:center;gap:24px}
+    .hero h1{font-size:clamp(30px,5vw,48px);line-height:1.2;margin:0 0 12px;color:var(--dark)}
+    .hero p{color:#52665b;line-height:1.8;margin:0 0 20px}
+    .hero-art{font-size:clamp(75px,12vw,140px);text-align:center;background:white;border-radius:28px;padding:20px;box-shadow:0 10px 30px #12372b12}
+    .wrap{max-width:1100px;margin:auto;padding:25px 16px}
+    .section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}
+    h2{margin:0;font-size:23px}.muted{color:var(--muted);font-size:14px}
+    .cats{display:flex;gap:10px;overflow:auto;padding:2px 0 12px}
+    .cat{border:1px solid #dce9e0;background:white;border-radius:999px;padding:9px 15px;white-space:nowrap}
+    .cat.active,.cat:hover{background:var(--green);color:white;border-color:var(--green)}
+    .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}
+    .card{border:1px solid #e3ece6;border-radius:15px;overflow:hidden;background:white;display:flex;flex-direction:column}
+    .photo{height:145px;background:var(--light);display:grid;place-items:center;font-size:62px}
+    .details{padding:12px;display:flex;flex-direction:column;gap:8px;flex:1}
+    .details h3{font-size:16px;margin:0}.price{font-size:18px;color:var(--green);font-weight:800}.old{font-size:13px;color:#87948c;text-decoration:line-through;margin-left:5px}
+    .add{width:100%;border:1px solid var(--green);background:white;color:var(--green);border-radius:9px;padding:9px;font-weight:700;margin-top:auto}
+    .add:hover{background:var(--green);color:white}
+    .notice{background:#fff7df;border:1px solid #ffe3a3;padding:13px 15px;border-radius:12px;font-size:14px;line-height:1.7}
+    footer{background:var(--dark);color:#eaf6ef;padding:25px 16px;margin-top:24px}.foot{max-width:1100px;margin:auto;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap}
+    .modal-back{position:fixed;inset:0;background:#0007;z-index:10;display:none;align-items:flex-end;justify-content:center}
+    .modal{background:white;border-radius:20px 20px 0 0;width:100%;max-width:600px;max-height:90vh;overflow:auto;padding:20px}
+    .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+    .close{border:0;background:#eef5f0;border-radius:50%;width:36px;height:36px;font-size:20px}
+    .cart-row{display:flex;align-items:center;gap:10px;border-bottom:1px solid #e8eee9;padding:12px 0}
+    .cart-row .grow{flex:1}.qty{display:flex;align-items:center;gap:8px}.qty button{border:1px solid #d7e5dc;background:white;border-radius:6px;width:28px;height:28px}
+    .field{display:grid;gap:6px;margin:12px 0}.field label{font-size:14px;font-weight:700}.field input,.field textarea,.field select{border:1px solid #d7e5dc;border-radius:9px;padding:11px;width:100%}
+    .total{display:flex;justify-content:space-between;font-size:18px;font-weight:800;padding:15px 0}
+    .empty{text-align:center;color:var(--muted);padding:25px}
+    @media(max-width:720px){.head{flex-wrap:wrap}.logo{font-size:22px}.search{order:3;flex-basis:100%}.hero-inner{grid-template-columns:1fr}.hero-art{padding:10px;font-size:80px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.photo{height:120px;font-size:52px}.wrap{padding:20px 12px}.details{padding:10px}.details h3{font-size:15px}}
+  </style>
+</head>
+<body>
+  <div class="top">BD Shop-এ স্বাগতম • সহজ অনলাইন কেনাকাটা</div>
+  <header>
+    <div class="head">
+      <div class="logo">BD <span>Shop</span></div>
+      <div class="search"><input id="search" type="search" placeholder="পণ্য খুঁজুন..." aria-label="পণ্য খুঁজুন"><button class="primary" onclick="renderProducts()">খুঁজুন</button></div>
+      <button class="cartbtn" onclick="openCart()">🛒 কার্ট (<span id="cart-count">0</span>)</button>
+    </div>
+  </header>
+  <main>
+    <section class="hero"><div class="hero-inner">
+      <div><h1>আপনার পছন্দের পণ্য,<br>এক জায়গায়</h1><p>BD Shop-এ ঘুরে দেখুন বিভিন্ন ধরনের পণ্য। পছন্দের পণ্য কার্টে যোগ করুন এবং নমুনা অর্ডার ফর্ম পূরণ করুন।</p><button class="primary" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">পণ্য দেখুন ↓</button></div>
+      <div class="hero-art" aria-hidden="true">🛍️📦</div>
+    </div></section>
+    <section class="wrap" id="products">
+      <div class="section-head"><div><h2>আমাদের পণ্য</h2><div class="muted">নমুনা পণ্য — নিজের পণ্য দিয়ে পরিবর্তন করুন</div></div></div>
+      <div class="cats" id="categories"></div>
+      <div class="grid" id="product-grid"></div>
+    </section>
+    <section class="wrap"><div class="notice"><b>গুরুত্বপূর্ণ:</b> এটি একটি প্রাথমিক ডেমো ওয়েবসাইট। কার্ট ও অর্ডার ফর্ম ব্রাউজারে কাজ করে, কিন্তু অর্ডার এখনো কোনো দোকানদারের কাছে পাঠায় না। বাস্তবে বিক্রি শুরু করতে পণ্য, যোগাযোগ নম্বর, ডেলিভারি ব্যবস্থা এবং নিরাপদ অর্ডার সংরক্ষণের ব্যবস্থা যুক্ত করতে হবে।</div></section>
+  </main>
+  <footer><div class="foot"><div><b style="font-size:22px">BD Shop</b><div>আপনার অনলাইন বাজার</div></div><div>যোগাযোগ: আপনার ফোন নম্বর এখানে দিন<br><span class="muted" style="color:#c9ddd1">© <span id="year"></span> BD Shop</span></div></div></footer>
+
+  <div class="modal-back" id="cart-modal" onclick="backdropClose(event)">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+      <div class="modal-head"><h2 id="cart-title">আপনার শপিং কার্ট</h2><button class="close" onclick="closeCart()" aria-label="বন্ধ করুন">×</button></div>
+      <div id="cart-items"></div>
+      <div class="total"><span>সর্বমোট</span><span id="cart-total">৳০</span></div>
+      <form id="order-form">
+        <h2 style="font-size:19px">ডেলিভারির তথ্য</h2>
+        <div class="field"><label for="customer">আপনার নাম</label><input id="customer" required placeholder="নাম লিখুন"></div>
+        <div class="field"><label for="phone">মোবাইল নম্বর</label><input id="phone" required inputmode="tel" pattern="[0-9+() -]{8,20}" placeholder="01XXXXXXXXX"></div>
+        <div class="field"><label for="address">সম্পূর্ণ ঠিকানা</label><textarea id="address" required rows="3" placeholder="গ্রাম/এলাকা, উপজেলা, জেলা"></textarea></div>
+        <div class="field"><label for="payment">পেমেন্ট পদ্ধতি</label><select id="payment"><option>ক্যাশ অন ডেলিভারি</option><option>পরে নিশ্চিত করব</option></select></div>
+        <button class="primary" type="submit" style="width:100%">ডেমো অর্ডার তৈরি করুন</button>
+      </form>
+      <div id="order-result" class="notice" style="display:none;margin-top:12px"></div>
+    </div>
+  </div>
+<script>
+const products = [
+ {id:1,name:"কটন টি-শার্ট",category:"পোশাক",price:350,old:450,icon:"👕"},
+ {id:2,name:"হেডফোন",category:"ইলেকট্রনিকস",price:650,old:800,icon:"🎧"},
+ {id:3,name:"হাতঘড়ি",category:"ফ্যাশন",price:550,old:700,icon:"⌚"},
+ {id:4,name:"ব্যাকপ্যাক",category:"ব্যাগ",price:780,old:950,icon:"🎒"},
+ {id:5,name:"কফি মগ",category:"ঘর ও রান্নাঘর",price:220,old:280,icon:"☕"},
+ {id:6,name:"স্পোর্টস জুতা",category:"পোশাক",price:1200,old:1450,icon:"👟"},
+ {id:7,name:"সানগ্লাস",category:"ফ্যাশন",price:300,old:400,icon:"🕶️"},
+ {id:8,name:"ফুটবল",category:"খেলাধুলা",price:500,old:650,icon:"⚽"}
+];
+let cart = JSON.parse(localStorage.getItem("bdshop-cart") || "{}");
+let activeCategory = "সব";
+const money = n => "৳" + Number(n).toLocaleString("bn-BD");
+function saveCart(){localStorage.setItem("bdshop-cart",JSON.stringify(cart));updateCount();}
+function updateCount(){document.getElementById("cart-count").textContent=Object.values(cart).reduce((a,b)=>a+b,0).toLocaleString("bn-BD");}
+function renderCategories(){
+ const cats=["সব",...new Set(products.map(p=>p.category))];
+ document.getElementById("categories").innerHTML=cats.map(c=>`<button class="cat ${activeCategory===c?'active':''}" onclick="setCategory('${c}')">${c}</button>`).join("");
+}
+function setCategory(c){activeCategory=c;renderCategories();renderProducts();}
+function renderProducts(){
+ const q=document.getElementById("search").value.trim().toLowerCase();
+ const list=products.filter(p=>(activeCategory==="সব"||p.category===activeCategory)&&(p.name.toLowerCase().includes(q)||p.category.toLowerCase().includes(q)));
+ document.getElementById("product-grid").innerHTML=list.length?list.map(p=>`<article class="card"><div class="photo">${p.icon}</div><div class="details"><h3>${p.name}</h3><div><span class="price">${money(p.price)}</span><span class="old">${money(p.old)}</span></div><div class="muted">${p.category}</div><button class="add" onclick="addToCart(${p.id})">＋ কার্টে যোগ করুন</button></div></article>`).join(""):`<div class="empty" style="grid-column:1/-1">কোনো পণ্য পাওয়া যায়নি। অন্য নামে খুঁজুন।</div>`;
+}
+function addToCart(id){cart[id]=(cart[id]||0)+1;saveCart();const b=document.querySelector(".cartbtn");b.textContent=`🛒 কার্ট (${Object.values(cart).reduce((a,b)=>a+b,0)})`;setTimeout(updateCount,900);}
+function openCart(){renderCart();document.getElementById("cart-modal").style.display="flex";document.body.style.overflow="hidden";}
+function closeCart(){document.getElementById("cart-modal").style.display="none";document.body.style.overflow="";}
+function backdropClose(e){if(e.target.id==="cart-modal")closeCart();}
+function changeQty(id,delta){cart[id]=(cart[id]||0)+delta;if(cart[id]<=0)delete cart[id];saveCart();renderCart();}
+function renderCart(){
+ const entries=Object.entries(cart).filter(([id,q])=>q>0);
+ const box=document.getElementById("cart-items");
+ if(!entries.length){box.innerHTML='<div class="empty">আপনার কার্ট খালি। আগে কিছু পণ্য যোগ করুন।</div>';document.getElementById("order-form").style.display="none";}
+ else{document.getElementById("order-form").style.display="block";box.innerHTML=entries.map(([id,q])=>{const p=products.find(x=>x.id===Number(id));return `<div class="cart-row"><span style="font-size:30px">${p.icon}</span><div class="grow"><b>${p.name}</b><div class="muted">${money(p.price)} × ${q.toLocaleString("bn-BD")}</div></div><div class="qty"><button onclick="changeQty(${id},-1)">−</button><span>${q.toLocaleString("bn-BD")}</span><button onclick="changeQty(${id},1)">+</button></div></div>`}).join("");}
+ const total=entries.reduce((sum,[id,q])=>sum+products.find(p=>p.id===Number(id)).price*q,0);
+ document.getElementById("cart-total").textContent=money(total);
+ document.getElementById("order-result").style.display="none";
+}
+document.getElementById("search").addEventListener("input",renderProducts);
+document.getElementById("order-form").addEventListener("submit",e=>{
+ e.preventDefault();
+ const entries=Object.entries(cart).filter(([id,q])=>q>0);
+ if(!entries.length)return;
+ const items=entries.map(([id,q])=>`${products.find(p=>p.id===Number(id)).name} × ${q}`).join(", ");
+ const total=entries.reduce((sum,[id,q])=>sum+products.find(p=>p.id===Number(id)).price*q,0);
+ const order={name:document.getElementById("customer").value,phone:document.getElementById("phone").value,address:document.getElementById("address").value,payment:document.getElementById("payment").value,items,total,createdAt:new Date().toISOString()};
+ // Demo only: order is shown locally and is not transmitted to a seller.
+ document.getElementById("order-result").innerHTML=`<b>ডেমো অর্ডার তৈরি হয়েছে!</b><br>পণ্য: ${items}<br>মোট: ${money(total)}<br><br>নাম: ${escapeHtml(order.name)}<br>ফোন: ${escapeHtml(order.phone)}<br>ঠিকানা: ${escapeHtml(order.address)}<br><br><b>মনে রাখবেন:</b> এই অর্ডারটি শুধু এই ব্রাউজারে দেখানো হচ্ছে; দোকানদারের কাছে পাঠানো হয়নি।`;
+ document.getElementById("order-result").style.display="block";
+ cart={};saveCart();renderCart();document.getElementById("order-result").style.display="block";
+});
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+document.getElementById("year").textContent=new Date().getFullYear().toLocaleString("bn-BD");
+renderCategories();renderProducts();updateCount();
+</script>
+</body>
+</html>
